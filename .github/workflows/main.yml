@@ -9,12 +9,12 @@ jobs:
   docker-compose:
     runs-on: ubuntu-latest
     env:
-      DB_POSTGRESDB_HOST: ${{ secrets.DB_POSTGRESDB_HOST }}
-      DB_POSTGRESDB_PORT: ${{ secrets.DB_POSTGRESDB_PORT }}
-      DB_POSTGRESDB_DATABASE: ${{ secrets.DB_POSTGRESDB_DATABASE }}
-      DB_POSTGRESDB_USER: ${{ secrets.DB_POSTGRESDB_USER }}
-      DB_POSTGRESDB_PASSWORD: ${{ secrets.DB_POSTGRESDB_PASSWORD }}
-      ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_PREFIX: ${{ secrets.DB_PREFIX }}
 
     steps:
       - name: Checkout repo
@@ -25,12 +25,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Restore secrets (certs & argo)
-        run: |
-          mkdir -p ~/aiven ~/cloudflare
-          echo "${{ secrets.CA_PEM_B64 }}" | base64 -d > ~/aiven/ca.pem
-          echo "${{ secrets.ARGO_YML_B64 }}" | base64 -d > ~/cloudflare/argo.yml
-          echo "${{ secrets.ARGO_JSON_B64 }}" | base64 -d > ~/cloudflare/argo.json
           
       - name: Delete old workflow runs
         uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
