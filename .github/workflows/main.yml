@@ -1,0 +1,46 @@
+name: Run stack
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [deploy-job]
+
+jobs:
+  docker-compose:
+    runs-on: ubuntu-latest
+    env:
+      DB_POSTGRESDB_HOST: ${{ secrets.DB_POSTGRESDB_HOST }}
+      DB_POSTGRESDB_PORT: ${{ secrets.DB_POSTGRESDB_PORT }}
+      DB_POSTGRESDB_DATABASE: ${{ secrets.DB_POSTGRESDB_DATABASE }}
+      DB_POSTGRESDB_USER: ${{ secrets.DB_POSTGRESDB_USER }}
+      DB_POSTGRESDB_PASSWORD: ${{ secrets.DB_POSTGRESDB_PASSWORD }}
+      ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Restore secrets (certs & argo)
+        run: |
+          mkdir -p ~/aiven ~/cloudflare
+          echo "${{ secrets.CA_PEM_B64 }}" | base64 -d > ~/aiven/ca.pem
+          echo "${{ secrets.ARGO_YML_B64 }}" | base64 -d > ~/cloudflare/argo.yml
+          echo "${{ secrets.ARGO_JSON_B64 }}" | base64 -d > ~/cloudflare/argo.json
+          
+      - name: Delete old workflow runs
+        uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          repository: ${{ github.repository }}
+          older-than-seconds: 3600
+
+      - name: Run docker-compose
+        run: |
+          docker-compose -f docker-compose.yml up
+          
