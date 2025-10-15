@@ -6,14 +6,11 @@ services:
     expose:
       - 8787
     environment:
-      - DB_DRIVER=${DB_DRIVER}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_DATABASE=${DB_DATABASE}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
-      - DB_CHARSET=${DB_CHARSET}
-      - DB_COLLATION=${DB_COLLATION}
       - DB_PREFIX=${DB_PREFIX}
 
   nginx:
