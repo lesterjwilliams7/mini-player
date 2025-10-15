@@ -15,6 +15,7 @@ jobs:
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_PREFIX: ${{ secrets.DB_PREFIX }}
+      TUNNEL_TOKEN: ${{ secrets.TUNNEL_TOKEN }}
 
     steps:
       - name: Checkout repo
