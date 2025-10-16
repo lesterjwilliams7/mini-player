@@ -12,7 +12,6 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PREFIX=${DB_PREFIX}
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
 
 #  nginx:
   #  image: nginx:alpine
@@ -23,10 +22,10 @@ services:
     #expose:
      # - 80 
 
-  #cloudflared:
-  #  image: cloudflare/cloudflared:latest
-   # depends_on:
-    #  - nginx
-    #command: tunnel --no-autoupdate run
-    #environment:
-     # - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+  cloudflared:
+   image: cloudflare/cloudflared:latest
+   depends_on:
+     - nginx
+    command: tunnel --no-autoupdate run
+    environment:
+     - TUNNEL_TOKEN=${TUNNEL_TOKEN}
