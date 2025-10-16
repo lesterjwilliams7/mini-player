@@ -23,9 +23,9 @@ services:
      # - 80 
 
   cloudflared:
-   image: cloudflare/cloudflared:latest
-   depends_on:
-     - app
+    image: cloudflare/cloudflared:latest
+    depends_on:
+      - app
     command: tunnel --no-autoupdate run
     environment:
-     - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
