@@ -3,8 +3,8 @@ version: "3.8"
 services:
   app:
     image: ghcr.io/macosupdate/mg:latest
-    expose:
-      - 8787
+    #expose:
+     # - 8787
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
@@ -12,20 +12,21 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PREFIX=${DB_PREFIX}
-
-  nginx:
-    image: nginx:alpine
-    depends_on:
-      - app
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    expose:
-      - 80 
-
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    depends_on:
-      - nginx
-    command: tunnel --no-autoupdate run
-    environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+
+#  nginx:
+  #  image: nginx:alpine
+  #  depends_on:
+   #   - app
+   # volumes:
+    #  - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    #expose:
+     # - 80 
+
+  #cloudflared:
+  #  image: cloudflare/cloudflared:latest
+   # depends_on:
+    #  - nginx
+    #command: tunnel --no-autoupdate run
+    #environment:
+     # - TUNNEL_TOKEN=${TUNNEL_TOKEN}
