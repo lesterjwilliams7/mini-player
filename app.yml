@@ -1,0 +1,113 @@
+volumes:
+  db-data:
+
+services:
+  app:
+    image: ghcr.io/macosupdate/mg:tiny
+    # user: "1000:1000"
+    volumes:
+      - db-data:/app/database
+    restart: always
+    depends_on:
+      litestream-app:
+        condition: service_healthy
+      litestream-crawl:
+        condition: service_healthy
+
+  litestream-app:
+    image: litestream/litestream:0.5.2
+    entrypoint: ["/bin/sh", "-c"]
+    # Timeout of health check will need to depend on size of db, and speed of network to host.
+    healthcheck:
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/hachiraw.db
+      timeout: 30m
+      retries: 1
+    command:
+       - /usr/local/bin/litestream replicate
+      # - while true; do sleep 300 done
+    volumes:
+    - db-data:/app/database
+    environment:
+      - R2_ACCESS_KEY=${R2_ACCESS_KEY}
+      - R2_SECRET_KEY=${R2_SECRET_KEY}
+      - R2_ENDPOINT=${R2_ENDPOINT}
+      - R2_BUCKET=${R2_BUCKET}
+      - DB_PATH=${DB_PATH}
+
+  litestream-crawl:
+    image: litestream/litestream:0.5.2
+    entrypoint: ["/bin/sh", "-c"]
+    # Timeout of health check will need to depend on size of db, and speed of network to host.
+    healthcheck:
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists /app/database/crawl.db
+      timeout: 30m
+      retries: 1
+    command:
+       - /usr/local/bin/litestream replicate
+      # - while true; do sleep 300 done
+    volumes:
+    - db-data:/app/database
+    - ./extra/litestream.yml:/etc/litestream.yml:ro
+    environment:
+      - R2_ACCESS_KEY=${R2_ACCESS_KEY}
+      - R2_SECRET_KEY=${R2_SECRET_KEY}
+      - R2_ENDPOINT=${R2_ENDPOINT}
+      - R2_BUCKET=${R2_BUCKET}
+      - CRAWL_DB_PATH=${CRAWL_DB_PATH}
+
+  
+  n8n:
+    image: ghcr.io/n8n-io/n8n:latest
+    ports:
+      - 5666:5678
+    environment:
+      - DB_TYPE=sqlite
+      - DB_SQLITE_VACUUM_ON_STARTUP=true
+      - DB_SQLITE_POOL_SIZE=3
+      # - N8N_RUNNERS_ENABLED=true
+      - N8N_LOG_LEVEL=info
+      - EXECUTIONS_DATA_MAX_AGE=72
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_PERSONALIZATION_ENABLED=false
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_HIRING_BANNER_ENABLED=false
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
+      - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=false
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=none
+      - N8N_SECURE_COOKIE=false
+      - NODE_ENV=production
+      - EXECUTIONS_DATA_PRUNE=true
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=true
+      - N8N_ENCRYPTION_KEY=E5cyaPxQH6TVRnkV
+      - N8N_SECURE_COOKIE=false
+    restart: always
+    volumes:
+      - db-data:/home/node/.n8n
+    depends_on:
+      litestream-n8n:
+        condition: service_healthy
+      app:
+        condition: service_healthy
+
+  litestream-n8n:
+    image: litestream/litestream:0.5.2
+    # image: ghcr.io/macosupdate/litestream:latest
+    # user: "1000:1000"
+    entrypoint: ["/bin/sh", "-c"]
+    # Timeout of health check will need to depend on size of db, and speed of network to host.
+    healthcheck:
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists /home/node/.n8n/database.sqlite
+      timeout: 30m
+      retries: 1
+    command:
+       - /usr/local/bin/litestream replicate
+      # - while true; do sleep 300 done
+    volumes:
+    - db-data:/home/node/.n8n
+    environment:
+      - R2_ACCESS_KEY=${R2_ACCESS_KEY}
+      - R2_SECRET_KEY=${R2_SECRET_KEY}
+      - R2_ENDPOINT=${R2_ENDPOINT}
+      - R2_BUCKET=${R2_BUCKET}
+      - N8N_DB_PATH=${N8N_DB_PATH}
