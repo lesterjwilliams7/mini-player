@@ -45,7 +45,7 @@ services:
       timeout: 30m
       retries: 1
     command:
-       - /usr/local/bin/litestream replicate -config /app/extra/litestream.yml
+       - /usr/local/bin/litestream replicate
       # - while true; do sleep 300 done
     volumes:
     - /home/runner/db:/app/database
