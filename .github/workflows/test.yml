@@ -53,7 +53,7 @@ jobs:
       - name: Run docker-compose
         run: |
           sudo chmod -R 777 /home/runner/db
-          docker compose -f app.yml up
+          docker compose -f app.yml up -d
 
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -71,7 +71,7 @@ jobs:
       - name: Do your work
         run: |
           echo "Running job at $(date)"
-          sleep 30m
+          sleep 20m
           
       - name: backup DB
         uses: actions/upload-artifact@v4
