@@ -1,0 +1,91 @@
+name: Run stack
+
+on:
+  # schedule:
+  #   - cron: '0 0,6,12,18 * * *'  
+    
+  workflow_dispatch:
+  repository_dispatch:
+    types: [deploy-job]
+
+# concurrency:
+#   group: n8n
+#   cancel-in-progress: false
+  
+jobs:
+  docker-compose:
+    runs-on: ubuntu-latest
+    env:
+      ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+      R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
+      R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Restore secrets (certs & argo)
+        run: |
+          mkdir -p ~/db
+          ARTIFACT_RUN_ID=$(curl -s "https://api.github.com/repos/${{ github.repository }}/actions/artifacts?per_page=1" | jq '.artifacts[0].workflow_run.id')
+          echo "artifact_run_id=$ARTIFACT_RUN_ID" >> $GITHUB_ENV
+                  
+      - name: Download previous DB
+        uses: actions/download-artifact@v5
+        with:
+          name: db
+          # path: /var/lib/docker/volumes/argosbx_n8n_data/_data
+          path: /home/runner/db
+          run-id: ${{ env.artifact_run_id }}
+          github-token: ${{ secrets.GH_TOKEN }}
+        continue-on-error: true
+
+      # - name: Cache Docker images.
+      #   uses: AndreKurait/docker-cache@0.6.0
+      #   with:
+      #     key: docker-${{ runner.os }}-${{ hashFiles('n8n.yml') }}
+
+      - name: Run docker-compose
+        run: |
+          sudo chmod -R 777 /home/runner/db
+          docker compose -f app.yml up -d
+
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          all_but_latest: true
+
+      - name: Delete old workflow runs
+        uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          repository: ${{ github.repository }}
+          older-than-seconds: 604800 # 7 days
+
+      - name: Do your work
+        run: |
+          echo "Running job at $(date)"
+          sleep 30m
+          
+      - name: backup DB
+        uses: actions/upload-artifact@v4
+        with:
+          name: db
+          # path: /var/lib/docker/volumes/argosbx_n8n_data/_data
+          path: |
+            /home/runner/db/*.sqlite
+            /home/runner/db/*.db
+          retention-days: 90
+          compression-level: 6
+          continue-on-error: true
+          
+      - name: Trigger next run
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/dispatches \
+            -d '{"event_type":"deploy-job"}'
+          
