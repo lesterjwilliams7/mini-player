@@ -45,8 +45,8 @@ services:
       timeout: 30m
       retries: 1
     command:
-       - /usr/local/bin/litestream replicate
-      # - while true; do sleep 300 done
+       # - /usr/local/bin/litestream replicate
+      - while true; do sleep 300 done
     volumes:
     - /home/runner/db:/app/database
     - ./litestream.yml:/etc/litestream.yml:ro
@@ -103,8 +103,8 @@ services:
       timeout: 30m
       retries: 1
     command:
-       - /usr/local/bin/litestream replicate
-      # - while true; do sleep 300 done
+       # - /usr/local/bin/litestream replicate
+      - while true; do sleep 300 done
     volumes:
     - /home/runner/db:/home/node/.n8n
     - ./litestream.yml:/etc/litestream.yml:ro
