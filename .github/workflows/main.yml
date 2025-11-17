@@ -11,6 +11,10 @@ on:
   repository_dispatch:
     types: [deploy-job]
 
+concurrency:
+  group: app
+  cancel-in-progress: false
+
 jobs:
   docker-compose:
     runs-on: ubuntu-latest
