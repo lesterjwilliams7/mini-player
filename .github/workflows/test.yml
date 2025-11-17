@@ -24,6 +24,7 @@ jobs:
       DB_PATH: ${{ secrets.DB_PATH }}
       CRAWL_DB_PATH: ${{ secrets.CRAWL_DB_PATH }}
       N8N_DB_PATH: ${{ secrets.N8N_DB_PATH }}
+      TUNNEL_TOKEN: ${{ secrets.TUNNEL_TOKEN }}
 
     steps:
       - name: Checkout repo
