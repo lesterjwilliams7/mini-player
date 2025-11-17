@@ -23,8 +23,8 @@ services:
     #   timeout: 30m
     #   retries: 1
     command:
-       # - /usr/local/bin/litestream replicate
-       - /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/hachiraw.db
+       # - /usr/local/bin/litestream replicate -config /app/extra/litestream.yml
+       - /usr/local/bin/litestream restore -config /app/extra/litestream.yml -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/hachiraw.db
       # - while true; do sleep 300 done
     volumes:
     - /home/runner/db:/app/database
@@ -40,11 +40,11 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     # Timeout of health check will need to depend on size of db, and speed of network to host.
     healthcheck:
-      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists /app/database/crawl.db
+      test: /usr/local/bin/litestream restore -config /app/extra/litestream.yml -if-db-not-exists -if-replica-exists /app/database/crawl.db
       timeout: 30m
       retries: 1
     command:
-       - /usr/local/bin/litestream replicate
+       - /usr/local/bin/litestream replicate -config /app/extra/litestream.yml
       # - while true; do sleep 300 done
     volumes:
     - /home/runner/db:/app/database
@@ -98,11 +98,11 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     # Timeout of health check will need to depend on size of db, and speed of network to host.
     healthcheck:
-      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists /home/node/.n8n/database.sqlite
+      test: /usr/local/bin/litestream restore -config /app/extra/litestream.yml -if-db-not-exists -if-replica-exists /home/node/.n8n/database.sqlite
       timeout: 30m
       retries: 1
     command:
-       - /usr/local/bin/litestream replicate
+       - /usr/local/bin/litestream replicate -config /app/extra/litestream.yml
       # - while true; do sleep 300 done
     volumes:
     - /home/runner/db:/home/node/.n8n
