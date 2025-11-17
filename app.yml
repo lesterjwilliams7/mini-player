@@ -5,6 +5,8 @@ services:
   app:
     image: ghcr.io/macosupdate/mg:tiny
     # user: "1000:1000"
+    environment:
+      - API_KEY=${API_KEY}
     volumes:
       - /home/runner/db:/app/database
     restart: always
