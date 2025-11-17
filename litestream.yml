@@ -1,0 +1,36 @@
+access-key-id: ${R2_ACCESS_KEY}
+secret-access-key: ${R2_SECRET_KEY}
+
+dbs:
+  - path: /app/database/hachiraw.db
+    replicas:
+      - url: s3://${R2_BUCKET}/${DB_PATH}
+        endpoint: ${R2_ENDPOINT}
+        region: auto
+        sync-interval: 1m                 # đồng bộ 5 phút/lần (thay vì 1 giây)
+        snapshot-interval: 12h            # tạo snapshot mới mỗi 12h
+        retention: 3d                     # giữ snapshot trong 3 ngày
+        retention-check-interval: 6h      # mỗi 6h dọn snapshot cũ
+        part-size: 20MB 
+        concurrency: 10
+        http-timeout: 6h
+
+  - path: /app/database/crawl.db
+    replicas:
+      - url: s3://${R2_BUCKET}/${CRAWL_DB_PATH}
+        endpoint: ${R2_ENDPOINT}
+        region: auto
+        sync-interval: 1m                 # đồng bộ 5 phút/lần (thay vì 1 giây)
+        snapshot-interval: 12h            # tạo snapshot mới mỗi 12h
+        retention: 3d                     # giữ snapshot trong 3 ngày
+        retention-check-interval: 6h      # mỗi 6h dọn snapshot cũ
+
+  - path: /home/node/.n8n/database.sqlite
+    replicas:
+      - url: s3://${R2_BUCKET}/${N8N_DB_PATH}
+        endpoint: ${R2_ENDPOINT}
+        region: auto
+        sync-interval: 5m                 # đồng bộ 5 phút/lần (thay vì 1 giây)
+        snapshot-interval: 1h            # tạo snapshot mới mỗi 12h
+        retention: 24h                     # giữ snapshot trong 3 ngày
+        retention-check-interval: 6h      # mỗi 6h dọn snapshot cũ
