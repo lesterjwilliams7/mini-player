@@ -8,7 +8,7 @@ services:
     volumes:
       - /home/runner/db:/app/database
     restart: always
-    depends_on:
+    # depends_on:
       # litestream-app:
       #   condition: service_healthy
       # litestream-crawl:
