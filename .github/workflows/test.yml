@@ -1,4 +1,4 @@
-name: Run stack
+name: test stack
 
 on:
   # schedule:
