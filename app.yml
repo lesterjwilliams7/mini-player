@@ -59,8 +59,6 @@ services:
   
   n8n:
     image: ghcr.io/n8n-io/n8n:latest
-    ports:
-      - 5666:5678
     environment:
       - DB_TYPE=sqlite
       - DB_SQLITE_VACUUM_ON_STARTUP=true
