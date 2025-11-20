@@ -11,8 +11,8 @@ services:
       - /home/runner/db:/app/database/db
     restart: always
     depends_on:
-      litestream-app:
-        condition: service_healthy
+      # litestream-app:
+      #   condition: service_healthy
       litestream-crawl:
         condition: service_healthy
 
