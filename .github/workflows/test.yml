@@ -5,8 +5,8 @@ on:
   #   - cron: '0 0,6,12,18 * * *'  
     
   workflow_dispatch:
-  # repository_dispatch:
-  #   types: [deploy-job]
+  repository_dispatch:
+    types: [deploy-app]
 
 # concurrency:
 #   group: n8n
@@ -85,8 +85,8 @@ jobs:
           name: db
           # path: /var/lib/docker/volumes/argosbx_n8n_data/_data
           path: |
-            /home/runner/db/*.sqlite
-            /home/runner/db/*.db
+            /home/runner/db/*.sqlite*
+            /home/runner/db/*.db*
           retention-days: 90
           compression-level: 6
           continue-on-error: true
@@ -97,5 +97,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
             https://api.github.com/repos/${{ github.repository }}/dispatches \
-            -d '{"event_type":"deploy-job"}'
+            -d '{"event_type":"deploy-app"}'
           
