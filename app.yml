@@ -114,13 +114,13 @@ services:
       - R2_BUCKET=${R2_BUCKET}
       - N8N_DB_PATH=${N8N_DB_PATH}
 
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    depends_on:
-      - app
-    command: tunnel --no-autoupdate run
-    environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+  # cloudflared:
+  #   image: cloudflare/cloudflared:latest
+  #   depends_on:
+  #     - app
+  #   command: tunnel --no-autoupdate run
+  #   environment:
+  #     - TUNNEL_TOKEN=${TUNNEL_TOKEN}
 
   autoheal:
     environment:
