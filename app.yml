@@ -11,8 +11,8 @@ services:
       - /home/runner/db:/app/database/db
     restart: always
     depends_on:
-      # litestream-app:
-      #   condition: service_healthy
+      litestream-app:
+        condition: service_healthy
       litestream-crawl:
         condition: service_healthy
 
@@ -20,13 +20,12 @@ services:
     image: litestream/litestream:0.5.2
     entrypoint: ["/bin/sh", "-c"]
     # Timeout of health check will need to depend on size of db, and speed of network to host.
-    # healthcheck:
-    #   test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/db/hachiraw.db
-    #   timeout: 30m
-    #   retries: 1
+    healthcheck:
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/db/hachiraw.db
+      timeout: 30m
+      retries: 1
     command:
-       # - /usr/local/bin/litestream replicate
-      - /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/db/hachiraw.db
+       - /usr/local/bin/litestream replicate
       # - while true; do sleep 300; done
     volumes:
     - /home/runner/db:/app/database/db
@@ -47,8 +46,8 @@ services:
       timeout: 30m
       retries: 1
     command:
-       # - /usr/local/bin/litestream replicate
-      - while true; do sleep 300; done
+       - /usr/local/bin/litestream replicate
+      # - while true; do sleep 300; done
     volumes:
     - /home/runner/db:/app/database/db
     - ./litestream.yml:/etc/litestream.yml:ro
@@ -103,8 +102,8 @@ services:
       timeout: 30m
       retries: 1
     command:
-       # - /usr/local/bin/litestream replicate
-      - while true; do sleep 300; done
+       - /usr/local/bin/litestream replicate
+      # - while true; do sleep 300; done
     volumes:
     - /home/runner/db:/home/node/.n8n
     - ./litestream.yml:/etc/litestream.yml:ro
@@ -115,13 +114,13 @@ services:
       - R2_BUCKET=${R2_BUCKET}
       - N8N_DB_PATH=${N8N_DB_PATH}
 
-  # cloudflared:
-  #   image: cloudflare/cloudflared:latest
-  #   depends_on:
-  #     - app
-  #   command: tunnel --no-autoupdate run
-  #   environment:
-  #     - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    depends_on:
+      - app
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
 
   autoheal:
     environment:
