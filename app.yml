@@ -8,7 +8,7 @@ services:
     environment:
       - API_KEY=${API_KEY}
     volumes:
-      - /home/runner/db:/app/database
+      - /home/runner/db:/app/database/db
     restart: always
     depends_on:
       litestream-app:
@@ -21,7 +21,7 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     # Timeout of health check will need to depend on size of db, and speed of network to host.
     healthcheck:
-      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/hachiraw.db
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/db/hachiraw.db
       timeout: 30m
       retries: 1
     command:
@@ -42,14 +42,14 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     # Timeout of health check will need to depend on size of db, and speed of network to host.
     healthcheck:
-      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists /app/database/crawl.db
+      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists /app/database/db/crawl.db
       timeout: 30m
       retries: 1
     command:
        - /usr/local/bin/litestream replicate
       # - while true; do sleep 300 done
     volumes:
-    - /home/runner/db:/app/database
+    - /home/runner/db:/app/database/db
     - ./litestream.yml:/etc/litestream.yml:ro
     environment:
       - R2_ACCESS_KEY=${R2_ACCESS_KEY}
@@ -121,3 +121,12 @@ services:
     command: tunnel --no-autoupdate run
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+
+  autoheal:
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: autoheal-app
+    image: willfarrell/autoheal:latest
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
