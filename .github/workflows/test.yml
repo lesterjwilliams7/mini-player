@@ -73,7 +73,7 @@ jobs:
       - name: Do your work
         run: |
           echo "Running job at $(date)"
-          sleep 30m
+          sleep 2m
           
       - name: stop n8n
         run: |
@@ -99,6 +99,6 @@ jobs:
       #       https://api.github.com/repos/${{ github.repository }}/dispatches \
       #       -d '{"event_type":"deploy-app"}'
 
-      - name: Do your work
-        run: |
-          sleep 5m
+      # - name: Do your work
+      #   run: |
+      #     sleep 5m
