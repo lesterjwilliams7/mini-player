@@ -2,7 +2,7 @@ access-key-id: ${R2_ACCESS_KEY}
 secret-access-key: ${R2_SECRET_KEY}
 
 dbs:
-  - path: /app/database/hachiraw.db
+  - path: /app/database/db/hachiraw.db
     replicas:
       - url: s3://${R2_BUCKET}/${DB_PATH}
         endpoint: ${R2_ENDPOINT}
@@ -15,7 +15,7 @@ dbs:
         concurrency: 10
         http-timeout: 6h
 
-  - path: /app/database/crawl.db
+  - path: /app/database/db/crawl.db
     replicas:
       - url: s3://${R2_BUCKET}/${CRAWL_DB_PATH}
         endpoint: ${R2_ENDPOINT}
