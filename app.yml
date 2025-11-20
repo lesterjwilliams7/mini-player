@@ -20,13 +20,14 @@ services:
     image: litestream/litestream:0.5.2
     entrypoint: ["/bin/sh", "-c"]
     # Timeout of health check will need to depend on size of db, and speed of network to host.
-    healthcheck:
-      test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/db/hachiraw.db
-      timeout: 30m
-      retries: 1
+    # healthcheck:
+    #   test: /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/db/hachiraw.db
+    #   timeout: 30m
+    #   retries: 1
     command:
        # - /usr/local/bin/litestream replicate
-      - while true; do sleep 300; done
+      - /usr/local/bin/litestream restore -if-db-not-exists -if-replica-exists -parallelism 64 /app/database/db/hachiraw.db
+      # - while true; do sleep 300; done
     volumes:
     - /home/runner/db:/app/database
     - ./litestream.yml:/etc/litestream.yml:ro
