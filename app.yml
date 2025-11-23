@@ -78,6 +78,7 @@ services:
       - DB_TYPE=sqlite
       - DB_SQLITE_VACUUM_ON_STARTUP=true
       - DB_SQLITE_POOL_SIZE=3
+      - DB_SQLITE_ENABLE_WAL=true
       # - N8N_RUNNERS_ENABLED=true
       - N8N_LOG_LEVEL=info
       - EXECUTIONS_DATA_MAX_AGE=72
@@ -97,7 +98,7 @@ services:
       - N8N_SECURE_COOKIE=false
     restart: always
     healthcheck:
-      test: ['CMD-SHELL', 'wget --spider -q http://127.0.0.1:5678/healthz || exit 1']
+      test: ['CMD-SHELL', 'wget --spider -q http://n8n:5678/healthz || exit 1']
       interval: 5s
       timeout: 5s
       retries: 10
