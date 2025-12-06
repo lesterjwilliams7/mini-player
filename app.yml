@@ -28,7 +28,7 @@ services:
         condition: service_healthy
 
   litestream-app:
-    image: litestream/litestream:0.5.2
+    image: ghcr.io/macosupdate/litestream:latest
     entrypoint: ["/bin/sh", "-c"]
     labels:
       autoheal-app: true
@@ -51,7 +51,7 @@ services:
       - DB_PATH=${DB_PATH}
 
   litestream-crawl:
-    image: litestream/litestream:0.5.2
+    image: ghcr.io/macosupdate/litestream:latest
     entrypoint: ["/bin/sh", "-c"]
     # Timeout of health check will need to depend on size of db, and speed of network to host.
     healthcheck:
@@ -113,7 +113,7 @@ services:
       #   condition: service_healthy
 
   litestream-n8n:
-    image: litestream/litestream:0.5.2
+    image: ghcr.io/macosupdate/litestream:latest
     # image: ghcr.io/macosupdate/litestream:latest
     # user: "1000:1000"
     entrypoint: ["/bin/sh", "-c"]
@@ -138,7 +138,7 @@ services:
       - N8N_DB_PATH=${N8N_DB_PATH}
 
   cloudflared:
-    image: cloudflare/cloudflared:latest
+    image: ghcr.io/macosupdate/cloudflared:latest
     labels:
       autoheal-app: true
     depends_on:
