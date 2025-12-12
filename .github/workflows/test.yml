@@ -14,7 +14,7 @@ on:
   
 jobs:
   docker-compose:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
       R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
