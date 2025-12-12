@@ -73,8 +73,8 @@ services:
 
   
   n8n:
-    image: ghcr.io/n8n-io/n8n:latest
-    # image: ghcr.io/macosupdate/n8n:latest
+    # image: ghcr.io/n8n-io/n8n:latest
+    image: ghcr.io/macosupdate/n8n:latest
     environment:
       - DB_TYPE=sqlite
       - DB_SQLITE_VACUUM_ON_STARTUP=true
