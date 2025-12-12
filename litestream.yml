@@ -8,8 +8,8 @@ dbs:
         endpoint: ${R2_ENDPOINT}
         region: auto
         sync-interval: 1m                 # đồng bộ 5 phút/lần (thay vì 1 giây)
-        snapshot-interval: 12h            # tạo snapshot mới mỗi 12h
-        retention: 3d                     # giữ snapshot trong 3 ngày
+        snapshot-interval: 24h            # tạo snapshot mới mỗi 12h
+        retention: 72h                     # giữ snapshot trong 3 ngày
         retention-check-interval: 6h      # mỗi 6h dọn snapshot cũ
         part-size: 20MB 
         concurrency: 10
@@ -21,8 +21,8 @@ dbs:
         endpoint: ${R2_ENDPOINT}
         region: auto
         sync-interval: 1m                 # đồng bộ 5 phút/lần (thay vì 1 giây)
-        snapshot-interval: 12h            # tạo snapshot mới mỗi 12h
-        retention: 3d                     # giữ snapshot trong 3 ngày
+        snapshot-interval: 24h            # tạo snapshot mới mỗi 12h
+        retention: 72h                     # giữ snapshot trong 3 ngày
         retention-check-interval: 6h      # mỗi 6h dọn snapshot cũ
 
   - path: /home/node/.n8n/database.sqlite
@@ -31,6 +31,6 @@ dbs:
         endpoint: ${R2_ENDPOINT}
         region: auto
         sync-interval: 5m                 # đồng bộ 5 phút/lần (thay vì 1 giây)
-        snapshot-interval: 1h            # tạo snapshot mới mỗi 12h
-        retention: 24h                     # giữ snapshot trong 3 ngày
+        snapshot-interval: 24h            # tạo snapshot mới mỗi 12h
+        retention: 72h                     # giữ snapshot trong 3 ngày
         retention-check-interval: 6h      # mỗi 6h dọn snapshot cũ
