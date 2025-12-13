@@ -56,12 +56,12 @@ jobs:
         run: |
           sudo chmod -R 777 /home/runner/db
           docker compose -f app.yml up -d
-      - name: install npm
-        run: docker exec mini-player-n8n-1 sh -c '
-              mkdir -p /home/node/.n8n/nodes &&
-              cd /home/node/.n8n/nodes &&
-              npm install n8n-nodes-sqlite3
-            '
+          sleep 1m
+          docker exec mini-player-n8n-1 sh -c '
+          mkdir -p /home/node/.n8n/nodes &&
+          cd /home/node/.n8n/nodes &&
+          npm install n8n-nodes-sqlite3
+          '
 
 
       - name: Cancel Previous Runs
