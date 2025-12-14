@@ -40,10 +40,10 @@ jobs:
       - name: Free disk space
         run: |
           sudo swapoff -a
-          sudo apt-get autoremove -y >/dev/null 2>&1
-          sudo apt-get autoclean -y >/dev/null 2>&1
-          sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc >/dev/null 2>&1
-          docker rmi $(docker image ls -aq) >/dev/null 2>&1
+          sudo apt-get autoremove -y
+          sudo apt-get autoclean -y
+          sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          docker rmi $(docker image ls -aq)
                   
       - name: Download previous DB
         uses: actions/download-artifact@v5
