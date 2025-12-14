@@ -43,7 +43,6 @@ jobs:
           sudo apt-get autoremove -y
           sudo apt-get autoclean -y
           sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc
-          docker rmi $(docker image ls -aq)
                   
       - name: Download previous DB
         uses: actions/download-artifact@v5
