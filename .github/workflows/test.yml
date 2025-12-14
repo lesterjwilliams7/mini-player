@@ -49,7 +49,7 @@ jobs:
 
       - name: Free disk space
         run: |
-          sudo swapoff /swapfile
+          sudo swapoff -a
           sudo apt-get autoremove -y >/dev/null 2>&1
           sudo apt-get autoclean -y >/dev/null 2>&1
           sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc >/dev/null 2>&1
