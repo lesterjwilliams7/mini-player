@@ -132,10 +132,10 @@ jobs:
       - name: Prepare files
         run: |
           mkdir ~/tmp
-          sudo cp -r /home/runner/db/*.sqlite* ~/tmp/db
-          sudo cp -r /home/runner/db/*.db* ~/tmp/db
+          sudo cp -r /home/runner/db/*.sqlite* ~/tmp
+          sudo cp -r /home/runner/db/*.db* ~/tmp
           sudo chown -R runner:runner ~/tmp
-          tar -C ~/tmp -cvz db | age -r age17e5pz635kejcszp2srn87tv6s64mzdd7g2ztskfz77jhujswtg2syzqqy8 > $GITHUB_WORKSPACE/db.tar.gz.age
+          tar -C ~/tmp -cvz . | age -r age17e5pz635kejcszp2srn87tv6s64mzdd7g2ztskfz77jhujswtg2syzqqy8 > $GITHUB_WORKSPACE/db.tar.gz.age
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
