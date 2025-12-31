@@ -26,6 +26,8 @@ jobs:
       N8N_DB_PATH: ${{ secrets.N8N_DB_PATH }}
       TUNNEL_TOKEN: ${{ secrets.TUNNEL_TOKEN }}
       API_KEY: ${{ secrets.API_KEY }}
+      TS_CLIENT_ID: ${{ secrets.TS_CLIENT_ID }}
+      TS_CLIENT_SECRET: ${{ secrets.TS_CLIENT_SECRET }}
 
     steps:
       - name: Checkout repo
@@ -57,9 +59,9 @@ jobs:
       - name: Free disk space
         run: |
           sudo swapoff -a
-          sudo apt-get autoremove -y
-          sudo apt-get autoclean -y
-          sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          # sudo apt-get autoremove -y
+          # sudo apt-get autoclean -y
+          sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/lib/jvm /usr/share/swift /usr/local/.ghcup /usr/local/julia* /usr/local/share/chromium /opt/microsoft /opt/google /opt/az /usr/local/share/powershell /opt/hostedtoolcache
                   
       - name: Download previous DB
         uses: actions/download-artifact@v5
@@ -87,7 +89,16 @@ jobs:
           # cd /home/node/.n8n/nodes &&
           # npm install n8n-nodes-sqlite3
           # '
-
+          
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_CLIENT_SECRET }}
+          # version: 1.90.9
+          tags: tag:github
+          hostname: manga-gh
+          
       # - name: Free disk space
       #   run: |
       #     sudo swapoff -a
@@ -116,6 +127,10 @@ jobs:
       - name: stop n8n
         run: |
           docker compose -f app.yml stop n8n
+          cd /home/runner/db/
+          sqlite3 crawl.db "PRAGMA wal_checkpoint(TRUNCATE);"
+          sqlite3 hachiraw.db "PRAGMA wal_checkpoint(TRUNCATE);"
+          sqlite3 database.sqlite "PRAGMA wal_checkpoint(TRUNCATE);"
           
       - name: backup DB
         uses: actions/upload-artifact@v4
