@@ -58,12 +58,12 @@ jobs:
           ARTIFACT_RUN_ID=$(curl -s "https://api.github.com/repos/${{ github.repository }}/actions/artifacts?per_page=1" | jq '.artifacts[0].workflow_run.id')
           echo "artifact_run_id=$ARTIFACT_RUN_ID" >> $GITHUB_ENV
       
-      - name: Free disk space
-        run: |
-          sudo swapoff -a
-          # sudo apt-get autoremove -y
-          # sudo apt-get autoclean -y
-          sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/lib/jvm /usr/share/swift /usr/local/.ghcup /usr/local/julia* /usr/local/share/chromium /opt/microsoft /opt/google /opt/az /usr/local/share/powershell
+      # - name: Free disk space
+      #   run: |
+      #     sudo swapoff -a
+      #     # sudo apt-get autoremove -y
+      #     # sudo apt-get autoclean -y
+      #     sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/lib/jvm /usr/share/swift /usr/local/.ghcup /usr/local/julia* /usr/local/share/chromium /opt/microsoft /opt/google /opt/az /usr/local/share/powershell
                   
       - name: Download previous DB
         uses: actions/download-artifact@v5
@@ -126,15 +126,11 @@ jobs:
 
       - name: Do your work
         run: |
-          sleep 5.6h
+          sleep 5h
           
       - name: stop n8n
         run: |
           docker compose -f app.yml stop n8n
-          cd /home/runner/db/
-          sqlite3 crawl.db "PRAGMA wal_checkpoint(TRUNCATE);"
-          sqlite3 hachiraw.db "PRAGMA wal_checkpoint(TRUNCATE);"
-          sqlite3 database.sqlite "PRAGMA wal_checkpoint(TRUNCATE);"
           
       - name: backup DB
         uses: actions/upload-artifact@v4
