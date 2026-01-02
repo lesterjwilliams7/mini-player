@@ -126,7 +126,7 @@ jobs:
 
       - name: Do your work
         run: |
-          sleep 5.7h
+          sleep 5.6h
           
       - name: stop n8n
         run: |
