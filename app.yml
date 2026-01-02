@@ -91,6 +91,7 @@ services:
       - EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS=false
       - EXECUTIONS_DATA_SAVE_ON_ERROR=none
       - N8N_SECURE_COOKIE=false
+      - NODES_EXCLUDE="[]"
       - NODE_ENV=production
       - EXECUTIONS_DATA_PRUNE=true
       - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
