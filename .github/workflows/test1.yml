@@ -5,8 +5,8 @@ on:
   #   - cron: '0 0,6,12,18 * * *'  
     
   workflow_dispatch:
-  repository_dispatch:
-    types: [deploy-app]
+  # repository_dispatch:
+  #   types: [deploy-app]
 
 # concurrency:
 #   group: n8n
