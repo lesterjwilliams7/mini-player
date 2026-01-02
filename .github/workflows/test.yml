@@ -152,7 +152,7 @@ jobs:
           # sudo cp -r /home/runner/db/*.sqlite* ~/tmp
           # sudo cp -r /home/runner/db/*.db* ~/tmp
           # sudo chown -R runner:runner ~/tmp
-          find /home/runner/db -type f \( -name "*.db" -o -name "*.sqlite" \) -print0 | tar --null -czf - --files-from=- | age -r age17e5pz635kejcszp2srn87tv6s64mzdd7g2ztskfz77jhujswtg2syzqqy8 > "$GITHUB_WORKSPACE/db.tar.gz.age"
+          find /home/runner/db -type f \( -name "*.db" -o -name "*.sqlite" -o -name "wget" \) -print0 | tar --null -czf - --files-from=- | age -r age17e5pz635kejcszp2srn87tv6s64mzdd7g2ztskfz77jhujswtg2syzqqy8 > "$GITHUB_WORKSPACE/db.tar.gz.age"
 
       
       - name: Set up Docker Buildx
