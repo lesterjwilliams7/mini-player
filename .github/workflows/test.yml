@@ -84,7 +84,7 @@ jobs:
       - name: Run docker-compose
         run: |
           sudo chmod -R 777 /home/runner/db
-          cp wget /home/ruuner/db
+          cp wget /home/runner/db
           sudo chmod +x /home/runner/db/wget
           docker compose -f app.yml up -d
           # sleep 1m
