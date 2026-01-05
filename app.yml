@@ -100,6 +100,7 @@ services:
       - N8N_SECURE_COOKIE=false
       - N8N_COMMUNITY_NODES_INSTALL=n8n-nodes-sqlite3
       - N8N_REINSTALL_MISSING_PACKAGES=true
+      - N8N_CONCURRENCY_PRODUCTION_LIMIT=20
     restart: always
     healthcheck:
       test: ['CMD-SHELL', 'wget --spider -q http://n8n:5678/healthz || exit 1']
