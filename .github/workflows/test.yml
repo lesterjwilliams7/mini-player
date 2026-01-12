@@ -56,8 +56,8 @@ jobs:
           age -d -i <(echo $AGE_SECRET_KEY) ~/db.tar.gz.age | tar -xz -C ~/db
           
           echo "DATE_TAG=$(date +%d-%m-%Y-%H-%M)" >> $GITHUB_ENV
-          ARTIFACT_RUN_ID=$(curl -s "https://api.github.com/repos/${{ github.repository }}/actions/artifacts?per_page=1" | jq '.artifacts[0].workflow_run.id')
-          echo "artifact_run_id=$ARTIFACT_RUN_ID" >> $GITHUB_ENV
+          # ARTIFACT_RUN_ID=$(curl -s "https://api.github.com/repos/${{ github.repository }}/actions/artifacts?per_page=1" | jq '.artifacts[0].workflow_run.id')
+          # echo "artifact_run_id=$ARTIFACT_RUN_ID" >> $GITHUB_ENV
       
       # - name: Free disk space
       #   run: |
@@ -123,11 +123,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           repository: ${{ github.repository }}
-          older-than-seconds: 604800 # 7 days
+          older-than-seconds: 259200 # 3 days
 
       - name: Do your work
         run: |
-          sleep 5h
+          sleep 5.2h
           
       - name: stop n8n
         run: |
@@ -139,17 +139,17 @@ jobs:
           sqlite3 ~/db/database.sqlite "PRAGMA wal_checkpoint(TRUNCATE);"
           # sqlite3 ~/db/database.sqlite "PRAGMA journal_mode=DELETE;"
           
-      - name: backup DB
-        uses: actions/upload-artifact@v4
-        with:
-          name: db
-          # path: /var/lib/docker/volumes/argosbx_n8n_data/_data
-          path: |
-            /home/runner/db/*.sqlite
-            /home/runner/db/*.db
-          retention-days: 90
-          compression-level: 6
-          continue-on-error: true
+      # - name: backup DB
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: db
+      #     # path: /var/lib/docker/volumes/argosbx_n8n_data/_data
+      #     path: |
+      #       /home/runner/db/*.sqlite
+      #       /home/runner/db/*.db
+      #     retention-days: 90
+      #     compression-level: 6
+      #     continue-on-error: true
           
       - name: Prepare files
         run: |
