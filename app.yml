@@ -73,7 +73,7 @@ services:
 
   
   n8n:
-    image: ghcr.io/n8n-io/n8n:latest
+    image: ghcr.io/n8n-io/n8n:2.4.6
     # image: ghcr.io/macosupdate/n8n:latest
     environment:
       - DB_TYPE=sqlite
