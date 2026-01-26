@@ -94,6 +94,10 @@ jobs:
           # cd /home/node/.n8n/nodes &&
           # npm install n8n-nodes-sqlite3
           # '
+          echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
+          echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
+          sudo sysctl -p /etc/sysctl.conf
+
           
       - name: Tailscale
         uses: tailscale/github-action@v2
@@ -103,6 +107,7 @@ jobs:
           # version: 1.90.9
           tags: tag:github
           hostname: manga-gh
+          args: --advertise-exit-node
           
       - name: Free disk space
         run: |
