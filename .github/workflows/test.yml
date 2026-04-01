@@ -101,6 +101,7 @@ jobs:
           
       - name: Tailscale
         uses: tailscale/github-action@v2
+        continue-on-error: true
         with:
           oauth-client-id: ${{ secrets.TS_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_CLIENT_SECRET }}
@@ -110,6 +111,7 @@ jobs:
           args: --advertise-exit-node
           
       - name: Free disk space
+        continue-on-error: true
         run: |
           # sudo swapoff -a
           # sudo apt-get autoremove -y
