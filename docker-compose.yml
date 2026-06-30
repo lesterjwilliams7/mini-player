@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   app:
-    image: ghcr.io/macosupdate/mg:latest
+    image: ghcr.io/macosupdate/mg:tiny
     expose:
       - 80
     environment:
